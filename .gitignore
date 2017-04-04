@@ -1,5 +1,5 @@
 .idea
-download/*
+.download
 node_modules
 
 coverage/*
