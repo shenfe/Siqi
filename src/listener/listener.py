@@ -48,8 +48,8 @@ class BaiduRest:
         data = {}
 
         # 语音的一些参数
-        data['format'] = 'mp3'
-        data['rate'] = 8000
+        data['format'] = 'wav'
+        data['rate'] = 16000
         data['channel'] = 1
         data['cuid'] = self.cu_id
         data['token'] = self.token_str
@@ -79,6 +79,6 @@ if __name__ == '__main__':
     print('get voice of text...')
     bdr.getVoice(u'把无聊的世界变得有趣', 'out.mp3')
 
-    # 3. 语音识别: 识别test.wav语音内容并显示
+    # 3. 语音识别: 识别in.wav语音内容并显示
     print('get text of voice...')
-    print(bdr.getText('out.mp3'))
+    print(bdr.getText('in.wav'))
