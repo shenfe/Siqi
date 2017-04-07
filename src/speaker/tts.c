@@ -149,8 +149,8 @@ int main(int argc, char* argv[])
 	* 详细参数说明请参阅《讯飞语音云MSC--API文档》
 	*/
 	const char* session_begin_params = "voice_name = xiaoyan, text_encoding = utf8, sample_rate = 16000, speed = 50, volume = 50, pitch = 50, rdn = 2";
-	const char* filename             = "tts_sample.wav"; //合成的语音文件名称
-	const char* text                 = "亲爱的用户，您好，这是一个语音合成示例，感谢您对科大讯飞语音技术的支持！科大讯飞是亚太地区最大的语音上市公司，股票代码：002230"; //合成文本
+	const char* filename             = "result.wav"; //合成的语音文件名称
+	const char* text                 = "把无聊的世界变得有趣。修习CS，目标是…偃术大师？"; //合成文本
 
 	/* 用户登录 */
 	ret = MSPLogin(NULL, NULL, login_params);//第一个参数是用户名，第二个参数是密码，第三个参数是登录参数，用户名和密码可在http://www.xfyun.cn注册获取
