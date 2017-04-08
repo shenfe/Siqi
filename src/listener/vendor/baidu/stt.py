@@ -13,8 +13,6 @@ class BaiduRest:
     def __init__(self, cu_id, api_key, api_secret):
         # token认证的url
         self.token_url = 'https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=%s&client_secret=%s'
-        # 语音合成的resturl
-        self.getvoice_url = 'http://tsn.baidu.com/text2audio?tex=%s&lan=zh&cuid=%s&ctp=1&tok=%s'
         # 语音识别的resturl
         self.upvoice_url = 'http://vop.baidu.com/server_api'
         # cuid
@@ -29,18 +27,6 @@ class BaiduRest:
         r_str = urllib2.urlopen(token_url).read()
         token_data = json.loads(r_str)
         self.token_str = token_data['access_token']
-        pass
-
-    def getVoice(self, text, filename):
-        # 向Rest接口提交数据
-        get_url = self.getvoice_url % (urllib.quote(text.encode('utf8')), self.cu_id, self.token_str)
-
-        voice_data = urllib2.urlopen(get_url).read()
-
-        # 处理返回数据
-        voice_fp = open(filename, 'wb+')
-        voice_fp.write(voice_data)
-        voice_fp.close()
         pass
 
     def getText(self, filename):
@@ -75,10 +61,6 @@ if __name__ == '__main__':
     print('init...')
     bdr = BaiduRest(cuid, api_key, api_secret)
 
-    # 2. 语音合成: 将字符串语音合成并保存为out.mp3
-    print('get voice of text...')
-    bdr.getVoice(u'把无聊的世界变得有趣', 'out.mp3')
-
-    # 3. 语音识别: 识别in.wav语音内容并显示
+    # 2. 语音识别: 识别in.wav语音内容并显示
     print('get text of voice...')
     print(bdr.getText('in.wav'))
