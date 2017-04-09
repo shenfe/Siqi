@@ -1,0 +1,118 @@
+============================================================
+Time  2017/04/09 13:48:17 871 
+============================================================
+[2017/04/09 13:48:17 871] waiter     120  waiter loaded!  
+[2017/04/09 13:48:17 871] network    806  update_iplist  
+[2017/04/09 13:48:17 871] network    493  gethttpresp3  http://open.xf-yun.com:80/ipcfg.txt  standard  
+[2017/04/09 13:48:17 871] network    465  gethttpresp  http://open.xf-yun.com:80/ipcfg.txt  
+[2017/04/09 13:48:17 871] network    238  gethostbyname  open.xf-yun.com  _nw2  
+[2017/04/09 13:48:17 871] waiter     196  last gc at  1491716897  
+[2017/04/09 13:48:17 873] network    806  update_iplist  
+[2017/04/09 13:48:17 873] waiter     196  last gc at  1491716897  
+[2017/04/09 13:48:17 875] network    417  gethttpresp2  117.121.21.146  1028  _nw3  
+[2017/04/09 13:48:17 876] waiter     196  last gc at  1491716897  
+[2017/04/09 13:48:17 878] network    806  update_iplist  
+[2017/04/09 13:48:17 878] waiter     196  last gc at  1491716897  
+[2017/04/09 13:48:17 882] network    323  connected  _nw3  
+[2017/04/09 13:48:17 883] network    326  send ok  91  _nw3  
+[2017/04/09 13:48:17 884] network    220  dns resp  0  _nw2  
+[2017/04/09 13:48:17 884] network    451  gethttpresp dns ok  117.121.21.146  
+[2017/04/09 13:48:17 884] network    417  gethttpresp2  117.121.21.146  80  _nw4  
+[2017/04/09 13:48:17 889] network    335  readable  _nw3  
+[2017/04/09 13:48:17 895] network    941  port1028 http resp  nil  0  udata(f0016828) 
+[2017/04/09 13:48:17 895] network    949  set preferred_port: 1028  
+[2017/04/09 13:48:17 895] network    806  update_iplist  
+[2017/04/09 13:48:17 895] waiter     196  last gc at  1491716897  
+[2017/04/09 13:48:17 896] network    323  connected  _nw4  
+[2017/04/09 13:48:17 896] network    326  send ok  92  _nw4  
+[2017/04/09 13:48:17 914] network    335  readable  _nw4  
+[2017/04/09 13:48:17 915] network    730  update iplist http resp  table(f00155f0) 0  udata(f0017178) 
+[2017/04/09 13:48:17 915] network    738  update iplist ok  
+[2017/04/09 13:48:17 915] network    760  not encrypted!  
+[2017/04/09 13:48:17 916] network    648  open.xf-yun.com  
+[2017/04/09 13:48:17 916] network    659  bj  
+[2017/04/09 13:48:17 916] network    661  bj  
+[2017/04/09 13:48:17 916] network    93   iptoenv ,  ipcfg  open.xf-yun.com  cm  117.121.56.3  
+[2017/04/09 13:48:17 917] network    93   iptoenv ,  ipcfg  open.xf-yun.com  ct  116.213.69.201  
+[2017/04/09 13:48:17 917] network    93   iptoenv ,  ipcfg  open.xf-yun.com  cu  117.121.56.8  
+[2017/04/09 13:48:17 918] network    93   iptoenv ,  ipcfg  open.xf-yun.com  def  116.213.69.199  
+[2017/04/09 13:48:17 919] network    661  gz  
+[2017/04/09 13:48:17 919] network    661  hf  
+============================================================
+Time  2017/04/09 14:04:48 967 
+============================================================
+[2017/04/09 14:04:48 968] waiter     120  waiter loaded!  
+[2017/04/09 14:04:48 968] network    806  update_iplist  
+[2017/04/09 14:04:48 968] network    493  gethttpresp3  http://open.xf-yun.com:80/ipcfg.txt  standard  
+[2017/04/09 14:04:48 968] network    465  gethttpresp  http://open.xf-yun.com:80/ipcfg.txt  
+[2017/04/09 14:04:48 968] network    238  gethostbyname  open.xf-yun.com  _nw2  
+[2017/04/09 14:04:48 969] waiter     196  last gc at  1491717888  
+[2017/04/09 14:04:48 969] network    806  update_iplist  
+[2017/04/09 14:04:48 969] waiter     196  last gc at  1491717888  
+[2017/04/09 14:04:48 969] network    417  gethttpresp2  117.121.21.147  1028  _nw3  
+[2017/04/09 14:04:48 982] waiter     196  last gc at  1491717888  
+[2017/04/09 14:04:48 982] network    220  dns resp  0  _nw2  
+[2017/04/09 14:04:48 982] network    451  gethttpresp dns ok  117.121.21.147  
+[2017/04/09 14:04:48 982] network    417  gethttpresp2  117.121.21.147  80  _nw4  
+[2017/04/09 14:04:48 990] network    323  connected  _nw3  
+[2017/04/09 14:04:48 990] network    326  send ok  91  _nw3  
+[2017/04/09 14:04:49 000] network    323  connected  _nw4  
+[2017/04/09 14:04:49 001] network    335  readable  _nw3  
+[2017/04/09 14:04:49 001] network    941  port1028 http resp  nil  0  udata(c00161f8) 
+[2017/04/09 14:04:49 001] network    949  set preferred_port: 1028  
+[2017/04/09 14:04:49 001] network    326  send ok  92  _nw4  
+[2017/04/09 14:04:49 013] network    335  readable  _nw4  
+[2017/04/09 14:04:49 014] network    730  update iplist http resp  table(c00155b0) 0  udata(c00172a8) 
+[2017/04/09 14:04:49 014] network    738  update iplist ok  
+[2017/04/09 14:04:49 015] network    760  not encrypted!  
+[2017/04/09 14:04:49 017] network    648  open.xf-yun.com  
+[2017/04/09 14:04:49 017] network    659  bj  
+[2017/04/09 14:04:49 017] network    661  bj  
+[2017/04/09 14:04:49 017] network    93   iptoenv ,  ipcfg  open.xf-yun.com  cm  117.121.56.3  
+[2017/04/09 14:04:49 018] network    93   iptoenv ,  ipcfg  open.xf-yun.com  ct  116.213.69.201  
+[2017/04/09 14:04:49 018] network    93   iptoenv ,  ipcfg  open.xf-yun.com  cu  117.121.56.8  
+[2017/04/09 14:04:49 019] network    93   iptoenv ,  ipcfg  open.xf-yun.com  def  116.213.69.199  
+[2017/04/09 14:04:49 020] network    661  gz  
+[2017/04/09 14:04:49 020] network    661  hf  
+[2017/04/09 14:04:49 021] network    806  update_iplist  
+[2017/04/09 14:04:49 021] waiter     196  last gc at  1491717888  
+============================================================
+Time  2017/04/09 14:05:04 482 
+============================================================
+[2017/04/09 14:05:04 482] waiter     120  waiter loaded!  
+[2017/04/09 14:05:04 482] network    806  update_iplist  
+[2017/04/09 14:05:04 482] network    493  gethttpresp3  http://open.xf-yun.com:80/ipcfg.txt  standard  
+[2017/04/09 14:05:04 483] network    465  gethttpresp  http://open.xf-yun.com:80/ipcfg.txt  
+[2017/04/09 14:05:04 483] network    238  gethostbyname  open.xf-yun.com  _nw2  
+[2017/04/09 14:05:04 483] waiter     196  last gc at  1491717904  
+[2017/04/09 14:05:04 484] network    806  update_iplist  
+[2017/04/09 14:05:04 484] waiter     196  last gc at  1491717904  
+[2017/04/09 14:05:04 484] network    417  gethttpresp2  117.121.21.147  1028  _nw3  
+[2017/04/09 14:05:04 491] waiter     196  last gc at  1491717904  
+[2017/04/09 14:05:04 493] network    806  update_iplist  
+[2017/04/09 14:05:04 493] waiter     196  last gc at  1491717904  
+[2017/04/09 14:05:04 494] network    220  dns resp  0  _nw2  
+[2017/04/09 14:05:04 494] network    451  gethttpresp dns ok  117.121.21.147  
+[2017/04/09 14:05:04 494] network    417  gethttpresp2  117.121.21.147  80  _nw4  
+[2017/04/09 14:05:04 495] network    806  update_iplist  
+[2017/04/09 14:05:04 495] waiter     196  last gc at  1491717904  
+[2017/04/09 14:05:04 496] network    323  connected  _nw3  
+[2017/04/09 14:05:04 496] network    326  send ok  91  _nw3  
+[2017/04/09 14:05:04 500] network    323  connected  _nw4  
+[2017/04/09 14:05:04 500] network    326  send ok  92  _nw4  
+[2017/04/09 14:05:04 511] network    335  readable  _nw3  
+[2017/04/09 14:05:04 515] network    941  port1028 http resp  nil  0  udata(f4019698) 
+[2017/04/09 14:05:04 515] network    949  set preferred_port: 1028  
+[2017/04/09 14:05:04 515] network    335  readable  _nw4  
+[2017/04/09 14:05:04 517] network    730  update iplist http resp  table(f4005920) 0  udata(f4019568) 
+[2017/04/09 14:05:04 517] network    738  update iplist ok  
+[2017/04/09 14:05:04 517] network    760  not encrypted!  
+[2017/04/09 14:05:04 519] network    648  open.xf-yun.com  
+[2017/04/09 14:05:04 519] network    659  bj  
+[2017/04/09 14:05:04 519] network    661  bj  
+[2017/04/09 14:05:04 520] network    93   iptoenv ,  ipcfg  open.xf-yun.com  cm  117.121.56.3  
+[2017/04/09 14:05:04 520] network    93   iptoenv ,  ipcfg  open.xf-yun.com  ct  116.213.69.201  
+[2017/04/09 14:05:04 521] network    93   iptoenv ,  ipcfg  open.xf-yun.com  cu  117.121.56.8  
+[2017/04/09 14:05:04 521] network    93   iptoenv ,  ipcfg  open.xf-yun.com  def  116.213.69.199  
+[2017/04/09 14:05:04 522] network    661  gz  
+[2017/04/09 14:05:04 522] network    661  hf  

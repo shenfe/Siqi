@@ -149,7 +149,7 @@ int main(int argc, char* argv[])
 	* 详细参数说明请参阅《讯飞语音云MSC--API文档》
 	*/
 	const char* session_begin_params = "voice_name = xiaoyan, text_encoding = utf8, sample_rate = 16000, speed = 50, volume = 50, pitch = 50, rdn = 2";
-	const char* filename             = "result.wav"; //合成的语音文件名称
+	const char* filename             = "output.wav"; //合成的语音文件名称
 	const char* text                 = "把无聊的世界变得有趣。修习CS，目标是…偃术大师？"; //合成文本
 
 	/* 用户登录 */
