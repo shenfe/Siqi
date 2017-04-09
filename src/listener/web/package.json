@@ -1,0 +1,27 @@
+{
+  "name": "stt",
+  "version": "1.0.0",
+  "description": "stt online",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/shenfe/Siqi.git"
+  },
+  "author": "sk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shenfe/Siqi/issues"
+  },
+  "homepage": "https://github.com/shenfe/Siqi#readme",
+  "dependencies": {
+    "binaryjs": "^0.2.1",
+    "express": "^4.15.2",
+    "socket.io": "^1.7.3",
+    "sox": "^0.1.0",
+    "wav": "^1.0.1"
+  }
+}
