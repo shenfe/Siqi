@@ -13,5 +13,7 @@ npm-debug.log*
 
 /test
 
-records/*.wav
-tmp/*.wav
+*records/*.wav
+*tmp/*.wav
+
+*.pem
