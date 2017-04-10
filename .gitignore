@@ -10,3 +10,5 @@ build/*
 npm-debug.log*
 
 .git
+
+/test
