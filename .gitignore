@@ -12,3 +12,6 @@ npm-debug.log*
 .git
 
 /test
+
+records/*.wav
+tmp/*.wav
