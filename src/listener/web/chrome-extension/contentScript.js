@@ -224,6 +224,8 @@
   window.VAD = VAD;
 
 })(window);
+
+
 /*! binary.js build:0.2.2, development. Copyright(c) 2012 Eric Zhang <eric@ericzhang.com> MIT Licensed */
 (function(exports){
 /*! binarypack.js build:0.0.9, production. Copyright(c) 2012 Eric Zhang <eric@ericzhang.com> MIT Licensed */(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
@@ -1793,6 +1795,8 @@ BinaryClient.prototype.close = BinaryClient.prototype.destroy = function() {
 exports.BinaryClient = BinaryClient;
 
 })(this);
+
+
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -9993,7 +9997,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-//# sourceMappingURL=socket.io.js.map(function () {
+//# sourceMappingURL=socket.io.js.map
+
+(function () {
 
     // Create AudioContext
     window.AudioContext = window.AudioContext || window.webkitAudioContext;

@@ -1,4 +1,4 @@
-chrome.devtools.panels.create('Siqi', 'icon.png',
+chrome.devtools.panels.create('Siqi', 'icon.png', 'panel.html',
     function (panel) {
         //
     }
