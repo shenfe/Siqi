@@ -76,12 +76,42 @@ var soxTaskExec = function (fileName, callback) {
     job.start();
 };
 
+// var spawn = require('child_process').spawn;
+var exec = require('child_process').exec;
+var stt = function (speechFilePath, callback) {
+    /*
+    var py = spawn('python', ['../vendor/baidu/stt.py', speechFilePath]);
+    console.log('stt file: ' + speechFilePath);
+    py.stdout.on('data', function (data) {
+        callback(data.toString());
+    });
+    py.stdout.on('end', function () {
+        //
+    });
+    */
+    var py = 'python ../vendor/baidu/stt.py ' + speechFilePath;
+    exec(py, {encoding: 'utf8'}, function (err, stdout, stderr) {
+        if (err) {
+            console.log('get text of speech error: ' + stderr);
+        } else {
+            var data = stdout;//JSON.parse(stdout);
+            console.log(data);
+            callback(data.toString());
+        }
+    });
+};
+
 // speech文件已经重采样生成完毕，最终要构造一个新的speech文件回传给client
 var speechFileHander = function (filePath, client) {
     // var file = fs.createReadStream(filePath);
     // client.send(file);
 
     if (iosocket) {
+        stt(recordDir + filePath, function (text) {
+            console.log('stt text: ' + text);
+            iosocket.emit('speech text returns', {text: text});
+        });
+        
         iosocket.emit('speech comes', {url: 'http://127.0.0.1:3883/' + filePath});
     }
 };

@@ -122,6 +122,9 @@
     var recordState = 0; // 0: not recording, 1: recording
 
     var socket = io.connect('http://127.0.0.1:3883');
+    socket.on('speech text returns', function (data) {
+        console.log('text comes from server: ' + data.text);
+    });
     socket.on('speech comes', function (data) {
         audioQueue.push(data.url);
         playAudio();

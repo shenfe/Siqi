@@ -8,6 +8,7 @@ import urllib
 import urllib2
 import json
 import base64
+import sys
 
 class BaiduRest:
     def __init__(self, cu_id, api_key, api_secret):
@@ -49,8 +50,8 @@ class BaiduRest:
 
         # 处理返回数据
         res = json.loads(r_data)
-        print res
-        return res['result']
+        #print res
+        return res['result'][0]
 
 if __name__ == '__main__':
     cuid = '1491278011881'
@@ -58,9 +59,9 @@ if __name__ == '__main__':
     api_secret = '51edadb50077bb6298a4fa00a6aeb1aa'
 
     # 1. 初始化
-    print('init...')
+    #print('init...')
     bdr = BaiduRest(cuid, api_key, api_secret)
 
     # 2. 语音识别: 识别in.wav语音内容并显示
-    print('get text of voice...')
-    print(bdr.getText('in.wav'))
+    #print('get text of voice...')
+    print bdr.getText(sys.argv[1].encode('UTF-8')).encode('UTF-8')
