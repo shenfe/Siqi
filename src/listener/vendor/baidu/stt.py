@@ -51,7 +51,8 @@ class BaiduRest:
         # 处理返回数据
         res = json.loads(r_data)
         #print res
-        return res['result'][0]
+        if res['err_no'] == 0: return res['result'][0]
+        return ''
 
 if __name__ == '__main__':
     cuid = '1491278011881'

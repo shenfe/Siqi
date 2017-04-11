@@ -30,50 +30,77 @@ var sox = require('sox');
 var tempDir     = './records/tmp/';
 var recordDir   = './records/';
 
+var clientAudioInfo = null;
+
 // 将原始speech文件转成指定格式，例如进行重采样
 var soxTaskExec = function (fileName, callback) {
-    var job = sox.transcode(tempDir + fileName, recordDir + fileName, {
-        sampleRate: 16000,
-        format: 'wav',
-        channelCount: 1,
-        bitRate: 192 * 1024,
-        compressionQuality: 5, // see `man soxformat` search for '-C' for more info
-    });
-    job.on('error', function (err) {
-        console.error(err);
-    });
-    job.on('progress', function (amountDone, amountTotal) {
-        console.log("progress", amountDone, amountTotal);
-    });
-    job.on('src', function (info) {
-        /* info looks like:
-        {
-            format: 'wav',
-            duration: 1.5,
-            sampleCount: 66150,
-            channelCount: 1,
-            bitRate: 722944,
-            sampleRate: 44100,
-        }
-        */
-    });
-    job.on('dest', function (info) {
-        /* info looks like:
-        {
-            sampleRate: 44100,
-            format: 'mp3',
-            channelCount: 2,
-            sampleCount: 67958,
-            duration: 1.540998,
-            bitRate: 196608,
-        }
-        */
-    });
-    job.on('end', function () {
-        console.log('complete resampling file ' + fileName);
-        callback(fileName);
-    });
-    job.start();
+    var proc = function (options, fileName, callback) {
+        var job = sox.transcode(tempDir + fileName, recordDir + fileName, {
+            sampleRate: options.sampleRate,
+            format: options.format,
+            channelCount: options.channelCount,
+            bitRate: options.bitRate,
+            compressionQuality: 5, // see `man soxformat` search for '-C' for more info
+        });
+        job.on('error', function (err) {
+            console.error(err);
+        });
+        job.on('progress', function (amountDone, amountTotal) {
+            console.log("progress", amountDone, amountTotal);
+        });
+        job.on('src', function (info) {
+            /* info looks like:
+            {
+                format: 'wav',
+                duration: 1.5,
+                sampleCount: 66150,
+                channelCount: 1,
+                bitRate: 722944,
+                sampleRate: 44100,
+            }
+            */
+        });
+        job.on('dest', function (info) {
+            /* info looks like:
+            {
+                sampleRate: 44100,
+                format: 'mp3',
+                channelCount: 2,
+                sampleCount: 67958,
+                duration: 1.540998,
+                bitRate: 196608,
+            }
+            */
+        });
+        job.on('end', function () {
+            console.log('complete resampling file ' + fileName);
+            callback(fileName);
+        });
+        job.start();
+    };
+
+    if (clientAudioInfo) {
+        proc(clientAudioInfo, fileName, callback);
+    } else {
+        sox.identify(tempDir + fileName, function (err, results) {
+            /* results looks like:
+            {
+                format: 'wav',
+                duration: 1.5,
+                sampleCount: 66150,
+                channelCount: 1,
+                bitRate: 722944,
+                sampleRate: 44100,
+            }
+            */
+            if (err) {
+                console.log('sox identify audio error');
+                return;
+            }
+            clientAudioInfo = results;
+            proc(clientAudioInfo, fileName, callback);
+        });
+    }
 };
 
 // var spawn = require('child_process').spawn;
@@ -96,7 +123,7 @@ var stt = function (speechFilePath, callback) {
         } else {
             var data = stdout;//JSON.parse(stdout);
             console.log(data);
-            callback(data.toString());
+            if (data.trim()) callback(data);
         }
     });
 };
@@ -111,7 +138,7 @@ var speechFileHander = function (filePath, client) {
             console.log('stt text: ' + text);
             iosocket.emit('speech text returns', {text: text});
         });
-        
+
         iosocket.emit('speech comes', {url: 'http://127.0.0.1:3883/' + filePath});
     }
 };
@@ -127,11 +154,12 @@ binaryServer.on('connection', function (client) {
     var fileWriter = null;
 
     client.on('stream', function (stream, meta) {
+        console.log('meta.sampleRate: ' + meta.sampleRate);
         var timestamp = Date.now();
         var fileName = `${timestamp}.wav`;
         var fileWriter = new wav.FileWriter(tempDir + fileName, {
             channels: 1,
-            sampleRate: 44100,
+            sampleRate: meta.sampleRate,
             bitDepth: 16
         });
         stream.pipe(fileWriter);
