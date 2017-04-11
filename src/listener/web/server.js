@@ -1,10 +1,25 @@
 var express = require('express');
+
+var fs = require('fs');
+
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('sslcert/private.pem', 'utf8');
+var certificate = fs.readFileSync('sslcert/file.crt', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+
 var app = express();
-var server = require('http').Server(app);
+var server = http.createServer(app);
+var sserver = https.createServer(credentials, app);
+
 var io = require('socket.io')(server);
-server.listen(3883);
+var httpPort = 3883;
+var httpsPort = 3884;
+server.listen(httpPort);
+sserver.listen(httpsPort);
 app.use(express.static(__dirname + '/src'));
 app.use(express.static(__dirname + '/records'));
+app.use(express.static(__dirname + '/replies'));
 app.get('/', function (req, res) {
     res.redirect('index.html');
 });
@@ -29,6 +44,7 @@ var sox = require('sox');
 // speech音频文件存放目录
 var tempDir     = './records/tmp/';
 var recordDir   = './records/';
+var replyDir    = 'replies/';
 
 var clientAudioInfo = null;
 
@@ -36,9 +52,9 @@ var clientAudioInfo = null;
 var soxTaskExec = function (fileName, callback) {
     var proc = function (options, fileName, callback) {
         var job = sox.transcode(tempDir + fileName, recordDir + fileName, {
-            sampleRate: options.sampleRate,
+            sampleRate: 16000,//options.sampleRate,
             format: options.format,
-            channelCount: options.channelCount,
+            channelCount: 1,
             bitRate: options.bitRate,
             compressionQuality: 5, // see `man soxformat` search for '-C' for more info
         });
@@ -123,13 +139,31 @@ var stt = function (speechFilePath, callback) {
         } else {
             var data = stdout;//JSON.parse(stdout);
             console.log(data);
-            if (data.trim()) callback(data);
+            data = data.trim().replace(/[\r\n]/g, '');
+            if (data) callback(data);
+        }
+    });
+};
+var tts = function (speechText, replySpeechFilePath, callback) {
+    var sh = 'export LD_LIBRARY_PATH=$(pwd)/libs/x64/ && ./bin/tts '
+        + speechText + ' ../../../listener/web/replies/' + replySpeechFilePath;
+    console.log('tts sh: ' + sh);
+    exec(sh, {
+        cwd: '../../speaker/vendor/xfyun',
+        encoding: 'utf8'
+    }, function (err, stdout, stderr) {
+        if (err) {
+            console.log('get speech of text error: ' + stderr);
+        } else {
+            var data = stdout;//JSON.parse(stdout);
+            console.log(data);
+            if (data.trim() === '1') callback(replySpeechFilePath);
         }
     });
 };
 
 // speech文件已经重采样生成完毕，最终要构造一个新的speech文件回传给client
-var speechFileHander = function (filePath, client) {
+var speechFileHander = function (filePath, client, https) {
     // var file = fs.createReadStream(filePath);
     // client.send(file);
 
@@ -137,16 +171,20 @@ var speechFileHander = function (filePath, client) {
         stt(recordDir + filePath, function (text) {
             console.log('stt text: ' + text);
             iosocket.emit('speech text returns', {text: text});
-        });
 
-        iosocket.emit('speech comes', {url: 'http://127.0.0.1:3883/' + filePath});
+            var timestamp = Date.now();
+            var fileName = `${timestamp}.wav`;
+            tts(text, fileName, function (replyFilePath) {
+                iosocket.emit('speech comes', {url: '//127.0.0.1:' + (https ? httpsPort : httpPort) + '/' + replyFilePath});
+            });
+        });
     }
 };
 
 // 原始speech文件已经生成完毕，需要转成指定格式（重采样等）
-var processWavFile = function (fileName, client) {
+var processWavFile = function (fileName, client, https) {
     soxTaskExec(fileName, function (resampledFileName) {
-        speechFileHander(resampledFileName, client);
+        speechFileHander(resampledFileName, client, https);
     });
 };
 
@@ -154,6 +192,7 @@ binaryServer.on('connection', function (client) {
     var fileWriter = null;
 
     client.on('stream', function (stream, meta) {
+        console.log('meta.protocol: ' + meta.protocol);
         console.log('meta.sampleRate: ' + meta.sampleRate);
         var timestamp = Date.now();
         var fileName = `${timestamp}.wav`;
@@ -167,7 +206,7 @@ binaryServer.on('connection', function (client) {
             if (fileWriter) {
                 fileWriter.end();
                 console.log('file written');
-                processWavFile(fileName, client);
+                processWavFile(fileName, client, meta.protocol === 'https:');
             }
         });
     });

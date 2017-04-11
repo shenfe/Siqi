@@ -10083,6 +10083,7 @@ return /******/ (function(modules) { // webpackBootstrap
         this.start = function () {
             recording = true;
             window.wstream = window.wclient.createStream({
+                protocol: window.location.protocol,
                 sampleRate: audioSampleRate
             });
             console.log('stream_start', Date.now());

@@ -51,7 +51,7 @@ class BaiduRest:
         # 处理返回数据
         res = json.loads(r_data)
         #print res
-        if res['err_no'] == 0: return res['result'][0]
+        if res['err_no'] == 0: return res['result'][0].encode('UTF-8')
         return ''
 
 if __name__ == '__main__':
@@ -65,4 +65,4 @@ if __name__ == '__main__':
 
     # 2. 语音识别: 识别in.wav语音内容并显示
     #print('get text of voice...')
-    print bdr.getText(sys.argv[1].encode('UTF-8')).encode('UTF-8')
+    print bdr.getText(sys.argv[1].encode('UTF-8'))
