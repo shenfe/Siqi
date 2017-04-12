@@ -56,13 +56,13 @@ var soxTaskExec = function (fileName, callback) {
             format: options.format,
             channelCount: 1,
             bitRate: options.bitRate,
-            compressionQuality: 5, // see `man soxformat` search for '-C' for more info
+            compressionQuality: 5 // see `man soxformat` search for '-C' for more info
         });
         job.on('error', function (err) {
             console.error(err);
         });
         job.on('progress', function (amountDone, amountTotal) {
-            console.log("progress", amountDone, amountTotal);
+            console.log('progress', amountDone, amountTotal);
         });
         job.on('src', function (info) {
             /* info looks like:
@@ -140,7 +140,7 @@ var stt = function (speechFilePath, callback) {
             var data = stdout;//JSON.parse(stdout);
             console.log(data);
             data = data.trim().replace(/[\r\n]/g, '');
-            if (data) callback(data);
+            if (data && data !== '，') callback(data);
         }
     });
 };
