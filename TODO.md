@@ -20,3 +20,5 @@ I'm an innovator, and also a tweaker.
 记录用户习惯，亲切感。账号打通、信用体系、用户画像是一种趋势。
 
 是一种服务，而不是单纯的一个app
+
+作为service，实现跨站数据共享，精确瞄准用户画像
