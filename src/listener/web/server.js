@@ -190,8 +190,11 @@ var processWavFile = function (fileName, client, https) {
 
 binaryServer.on('connection', function (client) {
     var fileWriter = null;
+    var meta = null;
 
-    client.on('stream', function (stream, meta) {
+    client.on('stream', function (stream, _meta) {
+        meta = _meta;
+        console.log('meta.streamId: ' + meta.streamId);
         console.log('meta.protocol: ' + meta.protocol);
         console.log('meta.sampleRate: ' + meta.sampleRate);
         var timestamp = Date.now();
@@ -208,6 +211,7 @@ binaryServer.on('connection', function (client) {
                 console.log('file written');
                 processWavFile(fileName, client, meta.protocol === 'https:');
             }
+            iosocket.emit('stream ends', {id: meta.streamId});
         });
     });
 

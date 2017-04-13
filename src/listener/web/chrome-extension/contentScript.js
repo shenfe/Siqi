@@ -10012,31 +10012,27 @@ return /******/ (function(modules) { // webpackBootstrap
     var audioContext = new AudioContext();
     var audioSampleRate = audioContext.sampleRate;
 
+    // Recorder
+    var recorder = null;
+
     // Define function called by getUserMedia
     function startUserMedia(stream) {
         // Create MediaStreamAudioSourceNode
         var source = audioContext.createMediaStreamSource(stream);
 
-        // Recorder
-        var recorder = new recordAudio(source);
+        recorder = new recordAudio(source);
 
         // Setup options
         var options = {
             source: source,
             voice_stop: function () {
                 console.log('voice_stop');
-                if (recordState === 1) {
-                    recorder.stop();
-                    console.log('recorder_stop');
-                    recordState = 0;
-                }
+                recorder.stop();
             },
             voice_start: function () {
                 console.log('voice_start');
                 if (!audioState) {
-                    recordState = 1;
                     recorder.start();
-                    console.log('recorder_start', Date.now());
                 }
             }
         };
@@ -10062,7 +10058,6 @@ return /******/ (function(modules) { // webpackBootstrap
         var bufferLen   = 2048,
             numChannels = 1;
         this.context = stream.context;
-        var recording = false;
         this.node = (this.context.createScriptProcessor ||
             this.context.createJavaScriptNode).call(this.context,
             bufferLen, numChannels, numChannels);
@@ -10080,41 +10075,49 @@ return /******/ (function(modules) { // webpackBootstrap
         }
 
         this.node.onaudioprocess = function (e) {
-            if (!recording) return;
+            if (recordState === 0) return;
 
             // Since numChannels is 1
             window.wstream.write(convertFloat32ToInt16(e.inputBuffer.getChannelData(0)));
         };
 
         this.start = function () {
-            recording = true;
+            if (recordState === 1) return;
+
+            recordState = 1;
+            var streamId = window.wstreams.length;
             window.wstream = window.wclient.createStream({
+                streamId: streamId,
                 protocol: window.location.protocol,
                 sampleRate: audioSampleRate
             });
-            console.log('stream_start', Date.now());
+            window.wstreams[streamId] = window.wstream;
+            console.log('< recorder_start, stream_start', Date.now());
         };
 
         this.stop = function () {
-            recording = false;
+            if (recordState === 0) return;
+
+            recordState = 0;
             window.wstream.end();
-            console.log('stream_end', Date.now());
+            console.log('recorder_stop, stream_end >', Date.now());
         };
     }
-
-    window.wclient = new BinaryClient('ws://127.0.0.1:9001');
 
     var audioQueue = [];
     function playAudio() {
         if (recordState === 0) {
-            if (!audioQueue.length) return;
+            if (!audioQueue.length) {
+                recorder.start();
+                return;
+            }
             audioState = true;
-            console.log('play_start', Date.now());
+            console.log('< play_start', Date.now());
 
             playAudioSimply(audioQueue.shift(), function () {
                 audioState = false;
-                console.log('play_end', Date.now());
-                setTimeout(playAudio, 1000);
+                console.log('play_end >', Date.now());
+                setTimeout(playAudio, 500);
             });
         } else {
             setTimeout(playAudio, 1000);
@@ -10136,8 +10139,16 @@ return /******/ (function(modules) { // webpackBootstrap
         console.log('text comes from server: ' + data.text);
     });
     socket.on('speech comes', function (data) {
+        console.log('speech comes from server: ' + data.url);
         audioQueue.push(data.url);
         playAudio();
     });
+    socket.on('stream ends', function (data) {
+        window.wstreams[data.id].destroy();
+        console.log('server ends stream: ' + data.id);
+    });
+
+    window.wclient = new BinaryClient('ws://127.0.0.1:9001');
+    window.wstreams = [];
 
 })();
