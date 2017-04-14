@@ -79,8 +79,8 @@
         this.voiceTrend = 0;
         this.voiceTrendMax = 10;
         this.voiceTrendMin = -10;
-        this.voiceTrendStart = 1; // origin: 5
-        this.voiceTrendEnd = -3; // origin: -5
+        this.voiceTrendStart = 5; // origin: 5
+        this.voiceTrendEnd = -5; // origin: -5
 
         // Create analyser
         this.analyser = this.options.context.createAnalyser();

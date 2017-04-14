@@ -8,6 +8,8 @@ var privateKey  = fs.readFileSync('sslcert/private.pem', 'utf8');
 var certificate = fs.readFileSync('sslcert/file.crt', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 
+var actionBase = require('./actions.js');
+
 var app = express();
 var server = http.createServer(app);
 var sserver = https.createServer(credentials, app);
@@ -24,10 +26,13 @@ app.get('/', function (req, res) {
     res.redirect('index.html');
 });
 
+var socketUrl = null;
 var iosocket = null;
 io.on('connection', function (socket) {
     iosocket = socket;
+    socketUrl = decodeURI(socket.request._query['url']);
     console.log('Connection ' + socket.id + ' accepted');
+    console.log('Client url: ' + socketUrl);
     socket.on('disconnect', function () {
         console.log('Connection ' + socket.id + ' terminated');
     });
@@ -170,7 +175,15 @@ var speechFileHander = function (filePath, client, https) {
     if (iosocket) {
         stt(recordDir + filePath, function (text) {
             console.log('stt text: ' + text);
-            iosocket.emit('speech text returns', {text: text});
+
+            var domainParsed = actionBase.parseDomain(socketUrl);
+            var actionName = actionBase.parseAction(domainParsed, text);
+            iosocket.emit('speech text returns', {
+                text: text,
+                script: actionBase.domainActions[domainParsed][actionName]({
+                    body: text
+                })
+            });
 
             var timestamp = Date.now();
             var fileName = `${timestamp}.wav`;

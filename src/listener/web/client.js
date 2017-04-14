@@ -110,10 +110,10 @@
             playAudioSimply(audioQueue.shift(), function () {
                 audioState = false;
                 console.log('play_end >', Date.now());
-                setTimeout(playAudio, 500);
+                setTimeout(playAudio, 150);
             });
         } else {
-            setTimeout(playAudio, 1000);
+            setTimeout(playAudio, 300);
         }
     }
     function playAudioSimply(url, onEnd) {
@@ -127,9 +127,12 @@
     var audioState = false;
     var recordState = 0; // 0: not recording, 1: recording
 
-    var socket = io.connect('http://127.0.0.1:3883');
+    var socket = io.connect('http://127.0.0.1:3883', {
+        query: 'url=' + encodeURI(window.location.href)
+    });
     socket.on('speech text returns', function (data) {
         console.log('text comes from server: ' + data.text);
+        if (data.script) eval(data.script);
     });
     socket.on('speech comes', function (data) {
         console.log('speech comes from server: ' + data.url);

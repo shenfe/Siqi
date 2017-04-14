@@ -11,7 +11,7 @@
 	},
     "content_scripts": [
         {
-            "matches": ["https://*.focus.cn/*"],
+            "matches": ["https://*.focus.cn/*", "http://127.0.0.1:8001/*", "http://sogou.com/*"],
             "js": ["contentScript.js"],
             "run_at": "document_start"
         }
