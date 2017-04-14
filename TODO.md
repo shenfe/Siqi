@@ -22,3 +22,6 @@ I'm an innovator, and also a tweaker.
 是一种服务，而不是单纯的一个app
 
 作为service，实现跨站数据共享，精确瞄准用户画像
+
+shejidao shengwenrenzheng jishu, duibuqi meishijian shixian
+huishengxiaochu suanfa, meishijianshixian

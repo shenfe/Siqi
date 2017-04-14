@@ -19,10 +19,37 @@ module.exports = {
         if (domain === 'focus.cn') {
             if (action.indexOf('登录') >= 0 || action.indexOf('登陆') >= 0)
                 return 'loginStart';
-            return 'search';
+            if (action.indexOf('我要找房') >= 0 || action.indexOf('搜索') >= 0)
+                return 'search';
+            return 'query';
         }
         if (domain === 'demo') {
             return 'login';
+        }
+    },
+    responseDecor: {
+        'm.zhibo.focus.cn': {
+            'postDanmu': function (text) {
+                text = text.replace('，', '');
+                return text;
+            }
+        },
+        'focus.cn': {
+            'query': function (text) {
+                return '查找' + text;
+            },
+            'search': function (text) {
+                return '为您查找房源';
+            },
+            'loginStart': function (text) {
+                return '忘记密码，请您朗诵春江花月夜第一句'
+            },
+            'loginSuccess': function (text) {
+                return '登录成功';
+            }
+        },
+        'demo': {
+            'login': function () {}
         }
     },
     domainActions: {
@@ -30,17 +57,20 @@ module.exports = {
             'postDanmu': function (data) {
                 var userName = '蘅芜散人';
                 var comment = data.body;
-                return 'var commentListDiv=document.getElementById("commentList");commentListDiv.innerHTML+=\'<div class="focus-beijing-zhibo-detail-chat-div7"><div class="focus-beijing-zhibo-detail-chat-div8"><span class="focus-beijing-zhibo-detail-chat-span2">${userName}：</span><span class="focus-beijing-zhibo-detail-chat-span3">${comment}</span></div></div>\';';
+                return `var commentListDiv=document.getElementById("commentList");commentListDiv.innerHTML+='<div class="focus-beijing-zhibo-detail-chat-div7"><div class="focus-beijing-zhibo-detail-chat-div8"><span class="focus-beijing-zhibo-detail-chat-span2">${userName}：</span><span class="focus-beijing-zhibo-detail-chat-span3">${comment}</span></div></div>';commentListDiv.scrollTop=commentListDiv.offsetHeight;`;
             }
         },
         'focus.cn': {
-            'search': function (data) {
+            'query': function (data) {
                 var text = data.body;
                 if (text.indexOf('海淀') >= 0)
                     return 'window.location.href="/loupan/q6/";';
                 if (text.indexOf('别墅') >= 0)
                     return 'window.location.href="/loupan/q6_w7/";';
                 return '';
+            },
+            'search': function (data) {
+                return 'window.location.href="/loupan/";';
             },
             'loginStart': function () {
                 return 'FCLogin.open();';
@@ -50,7 +80,7 @@ module.exports = {
             }
         },
         'demo': {
-            'login': ''
+            'login': function () {}
         }
     }
 };

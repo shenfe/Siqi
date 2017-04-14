@@ -178,8 +178,11 @@ var speechFileHander = function (filePath, client, https) {
 
             var domainParsed = actionBase.parseDomain(socketUrl);
             var actionName = actionBase.parseAction(domainParsed, text);
+            var originText = text;
+            text = actionBase.responseDecor[domainParsed][actionName](text);
             iosocket.emit('speech text returns', {
                 text: text,
+                origin: originText,
                 script: actionBase.domainActions[domainParsed][actionName]({
                     body: text
                 })
