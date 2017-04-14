@@ -6,8 +6,10 @@
 * @Last modified time: 2017-04-14 07:07:51
 */
 
+var hist = require('./store.js').hist;
 
 module.exports = {
+    chatHist: hist,
     parseDomain: function (url) {
         if (url.indexOf('m.sohu.com') >= 0) return 'm.sohu.com';
         if (url.indexOf('focus-beijing-zhibo-detail') >= 0) return 'm.zhibo.focus.cn';
@@ -16,11 +18,11 @@ module.exports = {
         if (url.indexOf('127.0.0.1') >= 0) return 'demo';
     },
     parseAction: function (domain, action) {
+        if (action.indexOf('在吗') >= 0)
+            return 'open';
+        if (action.indexOf('退下') >= 0)
+            return 'close';
         if (domain === 'm.sohu.com') {
-            if (action.indexOf('在吗') >= 0)
-                return 'open';
-            if (action.indexOf('退下') >= 0)
-                return 'close';
             return 'alias';
         }
         if (domain === 'm.zhibo.focus.cn') return 'postDanmu';
@@ -57,6 +59,12 @@ module.exports = {
             }
         },
         'focus.cn': {
+            'open': function () {
+                return '我一直在';
+            },
+            'close': function () {
+                return '我隐身了';
+            },
             'query': function (text) {
                 return '查找' + text;
             },
@@ -79,11 +87,15 @@ module.exports = {
             'open': function (data) {
                 var req = data.re;
                 var res = data.body;
+                hist.push({role: 0, body: req});
+                hist.push({role: 1, body: res});
                 return `var siqiContainer = document.querySelector("#siqiContainer");siqiContainer.className="show";var siqiContainer = document.querySelector("#siqiContainer #main");siqiContainer.innerHTML='<div class=wrap-l><div class=item>${res}</div></div>'+'<div class=wrap-r><div class=item>${req}</div></div>'+siqiContainer.innerHTML;`;
             },
             'close': function (data) {
                 var req = data.re;
                 var res = data.body;
+                hist.push({role: 0, body: req});
+                hist.push({role: 1, body: res});
                 return `var siqiContainer = document.querySelector("#siqiContainer");siqiContainer.className="";var siqiContainer = document.querySelector("#siqiContainer #main");siqiContainer.innerHTML='<div class=wrap-l><div class=item>${res}</div></div>'+'<div class=wrap-r><div class=item>${req}</div></div>'+siqiContainer.innerHTML;`;
             },
             'alias': function (data) {
@@ -103,6 +115,9 @@ module.exports = {
                         + '<br><a href="https://beijing.focus.cn/">北京房地产_北京房产网_北京房产信息网-北京搜狐焦点网</a>'
                         + '<br><a href="https://m.sohu.com/">手机搜狐网</a>';
                 }
+                
+                hist.push({role: 0, body: req});
+                hist.push({role: 1, body: res});
                 return `var siqiContainer = document.querySelector("#siqiContainer #main");siqiContainer.innerHTML='<div class=wrap-l><div class=item>${res}</div></div>'+'<div class=wrap-r><div class=item>${req}</div></div>'+siqiContainer.innerHTML;`;
             }
         },
@@ -114,12 +129,38 @@ module.exports = {
             }
         },
         'focus.cn': {
+            'open': function (data) {
+                var req = data.re;
+                var res = data.body;
+                hist.push({role: 0, body: req});
+                hist.push({role: 1, body: res});
+                return `var siqiContainer = document.querySelector("#siqiContainer");siqiContainer.className="show";var siqiContainer = document.querySelector("#siqiContainer #main");siqiContainer.innerHTML='<div class=wrap-l><div class=item>${res}</div></div>'+'<div class=wrap-r><div class=item>${req}</div></div>'+siqiContainer.innerHTML;`;
+            },
+            'close': function (data) {
+                var req = data.re;
+                var res = data.body;
+                hist.push({role: 0, body: req});
+                hist.push({role: 1, body: res});
+                return `var siqiContainer = document.querySelector("#siqiContainer");siqiContainer.className="";var siqiContainer = document.querySelector("#siqiContainer #main");siqiContainer.innerHTML='<div class=wrap-l><div class=item>${res}</div></div>'+'<div class=wrap-r><div class=item>${req}</div></div>'+siqiContainer.innerHTML;`;
+            },
             'query': function (data) {
                 var text = data.body;
+                var req = data.re;
                 if (text.indexOf('海淀') >= 0)
                     return 'window.location.href="/loupan/q6/";';
                 if (text.indexOf('别墅') >= 0)
                     return 'window.location.href="/loupan/q6_w7/";';
+                if (req.indexOf('历史') >= 0) {
+                    data.body = '';
+                    var res = '<a href="https://beijing.focus.cn/">北京房地产_北京房产网_北京房产信息网-北京搜狐焦点网</a>'
+                        + '<br><a href="https://m.zhibo.focus.cn/beijing/zhibo/12359.html?from=list">[焦点直播看房]近期的热门楼盘</a>'
+                        + '<br><a href="https://beijing.focus.cn/">北京房地产_北京房产网_北京房产信息网-北京搜狐焦点网</a>'
+                        + '<br><a href="https://m.sohu.com/">手机搜狐网</a>'
+                        + '<br><a href="https://m.focus.cn/beijing/">北京房地产_北京房产网_北京房产信息网-北京手机搜狐焦点网</a>';
+                    hist.push({role: 0, body: req});
+                    hist.push({role: 1, body: res});
+                    return `var siqiContainer = document.querySelector("#siqiContainer #main");siqiContainer.innerHTML='<div class=wrap-l><div class=item>${res}</div></div>'+'<div class=wrap-r><div class=item>${req}</div></div>'+siqiContainer.innerHTML;`;
+                }
                 return '';
             },
             'search': function (data) {

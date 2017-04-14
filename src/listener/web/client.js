@@ -2,7 +2,7 @@
     var injectStyle = '#siqiContainer{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:.2s all ease}#siqiContainer.show{z-index:9999999;opacity:.9;pointer-events:auto}#siqiContainer #main{flex:1;overflow:auto;padding:8px;background-color:#f6f6f6;transition:.2s all ease;display:flex;flex-direction:column-reverse}#siqiContainer #main .item{display:inline-block;margin:8px;padding:8px;max-width:80%;border-radius:4px}#siqiContainer #main .wrap-l{text-align:left}#siqiContainer #main .wrap-r{text-align:right}#siqiContainer #main .wrap-l .item{background-color:aquamarine}#siqiContainer #main .wrap-r .item{background-color:bisque}#siqiContainer siqifooter{border-top:1px solid #ccc;height:128px;display:flex}#siqiContainer #siqiCanvas{flex:1;background-color:#f6f6f6}#siqiContainer a{color:blue}';
     var injectHtml = '<div id=siqiContainer><div id=main></div><siqifooter><canvas id=siqiCanvas></canvas></siqifooter></div>';
     
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         var injectSheet = document.createElement('style');
         injectSheet.innerHTML = injectStyle;
         document.head.appendChild(injectSheet);
@@ -306,6 +306,17 @@
     socket.on('stream ends', function (data) {
         window.wstreams[data.id].destroy();
         console.log('server ends stream: ' + data.id);
+    });
+    socket.on('sync history', function (data) {
+        var list = data.hist;
+        document.addEventListener("DOMContentLoaded", function () {
+            var siqiContainer = document.querySelector("#siqiContainer #main");
+            siqiContainer.innerHTML = list.map(v => { 
+                return v.role === 1 ? 
+                    ('<div class=wrap-l><div class=item>' + v.body + '</div></div>') : 
+                    ('<div class=wrap-r><div class=item>' + v.body + '</div></div>'); 
+            }).reverse().join('');
+        }, false);
     });
 
     window.wclient = new BinaryClient('ws://127.0.0.1:9001');

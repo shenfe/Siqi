@@ -48,6 +48,10 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         console.log('Connection ' + socket.id + ' terminated');
     });
+    
+    socket.emit('sync history', {
+        hist: actionBase.chatHist
+    });
 });
 
 var binaryServer = require('binaryjs').BinaryServer({
