@@ -19,6 +19,8 @@ module.exports = {
         if (domain === 'focus.cn') {
             if (action.indexOf('登录') >= 0 || action.indexOf('登陆') >= 0)
                 return 'loginStart';
+            if (action.indexOf('明月') >= 0)
+                return 'loginSuccess';
             if (action.indexOf('我要找房') >= 0 || action.indexOf('搜索') >= 0)
                 return 'search';
             return 'query';
@@ -42,10 +44,10 @@ module.exports = {
                 return '为您查找房源';
             },
             'loginStart': function (text) {
-                return '忘记密码，请您朗诵春江花月夜第一句'
+                return '如您忘记密码，请朗诵春江花月夜第二句'
             },
             'loginSuccess': function (text) {
-                return '登录成功';
+                return '声纹匹配成功';
             }
         },
         'demo': {
@@ -73,10 +75,10 @@ module.exports = {
                 return 'window.location.href="/loupan/";';
             },
             'loginStart': function () {
-                return 'FCLogin.open();';
+                return '';
             },
             'loginSuccess': function () {
-                return 'FCLogin.close();document.cookie="IPLOC=CN1100; SUV=1704090108033127; ppinf=MXwxNDkxNjczMzMwMDE0fDE0OTQyNjUzMzAwMTR8MTQzMDUxODk1fHBwYWc4MDI5NDFiZGFhOWNAc29odS5jb20; pprdig=pZmPeoguF55CNXEHE7rnZsDkEwjjajpBurMyrv6TpTo3tYn4oStvk8jnt1qEWn0ZpoDEioBB6NJjQgt9nA+FLibQZgZz47bgGy5kLkvvD9pD21FTif9+//Y68aZsaByIo2fnmDFdGaPCTqwcKrnmweUbLb35jntade/Ot49GE2I; focusinf=MTQzMDUxODk1; pc_ad_feed=0; ad_strw=46e; focusbels=1; focus_pc_city_p=beijing; focus_city_p=beijing; focus_city_c=110100; focus_city_s=beijing";window.location.reload();';
+                return 'document.cookie="IPLOC=CN1100; SUV=1704090108033127; ppinf=MXwxNDkxNjczMzMwMDE0fDE0OTQyNjUzMzAwMTR8MTQzMDUxODk1fHBwYWc4MDI5NDFiZGFhOWNAc29odS5jb20; pprdig=pZmPeoguF55CNXEHE7rnZsDkEwjjajpBurMyrv6TpTo3tYn4oStvk8jnt1qEWn0ZpoDEioBB6NJjQgt9nA+FLibQZgZz47bgGy5kLkvvD9pD21FTif9+//Y68aZsaByIo2fnmDFdGaPCTqwcKrnmweUbLb35jntade/Ot49GE2I; focusinf=MTQzMDUxODk1; pc_ad_feed=0; ad_strw=46e; focusbels=1; focus_pc_city_p=beijing; focus_city_p=beijing; focus_city_c=110100; focus_city_s=beijing";window.location.reload();';
             }
         },
         'demo': {

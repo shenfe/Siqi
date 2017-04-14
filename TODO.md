@@ -25,3 +25,5 @@ I'm an innovator, and also a tweaker.
 
 shejidao shengwenrenzheng jishu, duibuqi meishijian shixian
 huishengxiaochu suanfa, meishijianshixian
+
+suiran yijingyou lunwen zhengming, dan shangwei zhaodao kekao de kaiyuan shixian
