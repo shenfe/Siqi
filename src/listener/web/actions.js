@@ -9,12 +9,20 @@
 
 module.exports = {
     parseDomain: function (url) {
+        if (url.indexOf('m.sohu.com') >= 0) return 'm.sohu.com';
         if (url.indexOf('focus-beijing-zhibo-detail') >= 0) return 'm.zhibo.focus.cn';
         if (url.indexOf('focus.cn') >= 0) return 'focus.cn';
         if (url.indexOf('sogou.com') >= 0) return 'sogou.com';
         if (url.indexOf('127.0.0.1') >= 0) return 'demo';
     },
     parseAction: function (domain, action) {
+        if (domain === 'm.sohu.com') {
+            if (action.indexOf('在吗') >= 0)
+                return 'open';
+            if (action.indexOf('退下') >= 0)
+                return 'close';
+            return 'alias';
+        }
         if (domain === 'm.zhibo.focus.cn') return 'postDanmu';
         if (domain === 'focus.cn') {
             if (action.indexOf('登录') >= 0 || action.indexOf('登陆') >= 0)
@@ -28,8 +36,20 @@ module.exports = {
         if (domain === 'demo') {
             return 'login';
         }
+        return action;
     },
     responseDecor: {
+        'm.sohu.com': {
+            'open': function () {
+                return '我一直在';
+            },
+            'close': function () {
+                return '我隐身了';
+            },
+            'alias': function (text) {
+                return text;
+            }
+        },
         'm.zhibo.focus.cn': {
             'postDanmu': function (text) {
                 text = text.replace('，', '');
@@ -55,6 +75,37 @@ module.exports = {
         }
     },
     domainActions: {
+        'm.sohu.com': {
+            'open': function (data) {
+                var req = data.re;
+                var res = data.body;
+                return `var siqiContainer = document.querySelector("#siqiContainer");siqiContainer.className="show";var siqiContainer = document.querySelector("#siqiContainer #main");siqiContainer.innerHTML='<div class=wrap-l><div class=item>${res}</div></div>'+'<div class=wrap-r><div class=item>${req}</div></div>'+siqiContainer.innerHTML;`;
+            },
+            'close': function (data) {
+                var req = data.re;
+                var res = data.body;
+                return `var siqiContainer = document.querySelector("#siqiContainer");siqiContainer.className="";var siqiContainer = document.querySelector("#siqiContainer #main");siqiContainer.innerHTML='<div class=wrap-l><div class=item>${res}</div></div>'+'<div class=wrap-r><div class=item>${req}</div></div>'+siqiContainer.innerHTML;`;
+            },
+            'alias': function (data) {
+                var req = data.re;
+                var res = data.body;
+                if (req.indexOf('热门') >= 0 || req.indexOf('头条') >= 0) {
+                    data.body = '';
+                    res = '<a href="/n/488442936/?wscrid=15084_1">习近平对廖俊波事迹作指示</a>'
+                        + '<br><a href="/n/488442214/?wscrid=53939_1">4月17日起国航暂停平壤航线</a>'
+                        + '<br><a href="/n/488419616/?wscrid=1137_1">宁波原市长受贿1.47亿 当庭认罪悔罪</a>'
+                        + '<br><a href="/n/488334707/?wscrid=1137_6">多家公司股价再现闪崩 谁是幕后凶手</a>'
+                        + '<br><a href="/n/488338971/?wscrid=1140_7">楼市被严格限购 你的钱该投向哪里?</a>';
+                } else if (req.indexOf('历史') >= 0) {
+                    data.body = '';
+                    res = '<a href="https://beijing.focus.cn/">北京房地产_北京房产网_北京房产信息网-北京搜狐焦点网</a>'
+                        + '<br><a href="https://m.zhibo.focus.cn/beijing/zhibo/12359.html?from=list">[焦点直播看房]近期的热门楼盘</a>'
+                        + '<br><a href="https://beijing.focus.cn/">北京房地产_北京房产网_北京房产信息网-北京搜狐焦点网</a>'
+                        + '<br><a href="https://m.sohu.com/">手机搜狐网</a>';
+                }
+                return `var siqiContainer = document.querySelector("#siqiContainer #main");siqiContainer.innerHTML='<div class=wrap-l><div class=item>${res}</div></div>'+'<div class=wrap-r><div class=item>${req}</div></div>'+siqiContainer.innerHTML;`;
+            }
+        },
         'm.zhibo.focus.cn': {
             'postDanmu': function (data) {
                 var userName = '蘅芜散人';

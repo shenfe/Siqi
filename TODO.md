@@ -27,3 +27,7 @@ shejidao shengwenrenzheng jishu, duibuqi meishijian shixian
 huishengxiaochu suanfa, meishijianshixian
 
 suiran yijingyou lunwen zhengming, dan shangwei zhaodao kekao de kaiyuan shixian
+
+yidongduan, zhiling jiuhaobi weixingongzhonghao zhiling, zheshi chengwei fuwu zhihou baolu de jiekou
+
+yishang jiushiwo muqianweizhi de jishujiagou he sixiang

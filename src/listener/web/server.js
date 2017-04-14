@@ -19,6 +19,18 @@ var httpPort = 3883;
 var httpsPort = 3884;
 server.listen(httpPort);
 sserver.listen(httpsPort);
+
+// CORS middleware
+var allowCrossDomain = function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept');
+
+    next();
+};
+
+app.use(allowCrossDomain);
+
 app.use(express.static(__dirname + '/src'));
 app.use(express.static(__dirname + '/records'));
 app.use(express.static(__dirname + '/replies'));
@@ -144,7 +156,7 @@ var stt = function (speechFilePath, callback) {
         } else {
             var data = stdout;//JSON.parse(stdout);
             console.log(data);
-            data = data.trim().replace(/[\r\n]/g, '');
+            data = data.replace(/[\r\n]/g, '').replace('，', ' ').trim();
             if (data && data !== '，') callback(data);
         }
     });
@@ -180,19 +192,23 @@ var speechFileHander = function (filePath, client, https) {
             var actionName = actionBase.parseAction(domainParsed, text);
             var originText = text;
             text = actionBase.responseDecor[domainParsed][actionName](text);
+            var processData = {
+                body: text,
+                re: originText
+            };
             iosocket.emit('speech text returns', {
                 text: text,
                 origin: originText,
-                script: actionBase.domainActions[domainParsed][actionName]({
-                    body: text
-                })
+                script: actionBase.domainActions[domainParsed][actionName](processData)
             });
 
-            var timestamp = Date.now();
-            var fileName = `${timestamp}.wav`;
-            tts(text, fileName, function (replyFilePath) {
-                iosocket.emit('speech comes', {url: '//127.0.0.1:' + (https ? httpsPort : httpPort) + '/' + replyFilePath});
-            });
+            if (processData.body.trim()) {
+                var timestamp = Date.now();
+                var fileName = `${timestamp}.wav`;
+                tts(text, fileName, function (replyFilePath) {
+                    iosocket.emit('speech comes', {url: '//127.0.0.1:' + (https ? httpsPort : httpPort) + '/' + replyFilePath});
+                });
+            }
         });
     }
 };
